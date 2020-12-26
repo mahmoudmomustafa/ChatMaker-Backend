@@ -21,4 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('signup', 'Auth\AuthController@signup')->name('signup');
     Route::post('login', 'Auth\AuthController@login')->name('login');
+    Route::get('me', 'Auth\AuthController@profile')->name('profile');
 });

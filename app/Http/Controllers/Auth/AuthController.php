@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -19,23 +22,27 @@ class AuthController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login', 'signup']]);
     }
+
+    public function profile()
+    {
+        $user = auth()->user();
+        return  response()->json($user);
+    }
+
     /**
      * Get a JWT via given credentials.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $data = $request->only('email', 'password');
+        $validatedData = $request->validated();
         $token = null;
 
-        if (!$token = JWTAuth::attempt($data)) {
-            return response()->json([
-                'message' => 'Invalid Email or Password',
-            ], 401);
+        if (!$token = Auth::attempt($validatedData)) {
+            return response()->json(['message' => 'Invalid Email or Password'], 401);
         }
-
-        return response()->json(['token' => $token]);
+        return  response()->json(['token' => $token]);
     }
 
     /**
@@ -43,23 +50,26 @@ class AuthController extends Controller
      *
      * @param  array  $data
      */
-    public function signup(Request $request)
+    public function signup(RegisterRequest $request)
     {
-        $this->validate($request, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
-        ]);
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-        $token = Auth::login($user);
+        $validatedData = $request->validated();
+        $validatedData['password'] = Hash::make($validatedData['password']);
 
-        $user = $user->toArray();
+        $user = User::create($validatedData);
+        $token = Auth::login($user);
         $user['token'] = $token;
 
-        return response()->json($user, 201);
+        return  response()->json($user, 201);
+    }
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        Auth::logout();
+        return  response()->json(['message' => 'Successfully logged out']);
     }
 }
