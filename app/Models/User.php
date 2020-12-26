@@ -61,4 +61,9 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function cvs()
+    {
+        return $this->hasMany(Cv::class);
+    }
 }

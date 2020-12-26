@@ -23,3 +23,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('login', 'Auth\AuthController@login')->name('login');
     Route::get('me', 'Auth\AuthController@profile')->name('profile');
 });
+
+Route::group(['prefix' => 'cvs'], function ($router) {
+    Route::get('index', 'Cv\CvController@index')->name('index');
+});

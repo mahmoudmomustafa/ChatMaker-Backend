@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Cv;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
+        \App\Models\User::factory(10)->has(Cv::factory()->count(3), 'cvs')->create();
     }
 }
