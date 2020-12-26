@@ -20,4 +20,25 @@ class Cv extends Model
     {
         $this->belongsTo(User::class);
     }
+
+    // cv has many educations
+    public function educations()
+    {
+        return $this->hasMany(Education::class);
+    }
+    // cv has many experiences
+    public function experiences()
+    {
+        return $this->hasMany(Experience::class);
+    }
+    // cv has many sections
+    public function sections()
+    {
+        return $this->hasMany(Section::class);
+    }
+    // cv has many dated sections
+    public function datedSections()
+    {
+        return $this->hasMany(DatedSection::class);
+    }
 }
