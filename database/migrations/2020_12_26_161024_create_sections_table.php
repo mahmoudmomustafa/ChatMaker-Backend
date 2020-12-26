@@ -20,7 +20,7 @@ class CreateSectionsTable extends Migration
             $table->timestamps();
 
             $table->unsignedBigInteger('cv_id');
-            $table->foreign('cv_id')->references('id')->on('cvs');
+            $table->foreign('cv_id')->references('id')->on('cvs')->onDelete('cascade');;
         });
     }
 

@@ -22,8 +22,8 @@ class CreateDatedDataTable extends Migration
             $table->date('end_date');
             $table->timestamps();
 
-            $table->unsignedBigInteger('dated_sections_id');
-            $table->foreign('dated_sections_id')->references('id')->on('dated_sections');
+            $table->unsignedBigInteger('dated_section_id');
+            $table->foreign('dated_section_id')->references('id')->on('dated_sections')->onDelete('cascade');
         });
     }
 

@@ -21,7 +21,7 @@ class DatedSection extends Model
         return $this->belongsTo(Cv::class);
     }
     // 
-    public function data()
+    public function datedData()
     {
         return $this->hasMany(DatedData::class);
     }
